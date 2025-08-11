@@ -1,3 +1,36 @@
 syntax = "proto3";
 
 package chat.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "https://github.com/ChanKachan/chatapplication/tree/master/proto;chat";
+
+message  User {
+  string id = 1;
+  string username = 2;
+}
+
+message ChatMessage {
+  string id = 1;
+  User sender = 2;
+  string text = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  repeated string users_read = 5;
+}
+
+message ConnectReaquest {
+  User user = 1;
+  string chat_room_id = 2;
+}
+
+message MessageAck{
+  string message_id = 1;
+  string status = 2;
+}
+
+service  ChatService {
+  rpc Contect(ConnectReaquest) returns (stream ChatMessage);
+  rpc SendMessage(stream ChatMessage) returns (MessageAck);
+}
+
